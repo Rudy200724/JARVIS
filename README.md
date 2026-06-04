@@ -1,12 +1,31 @@
 # JARVIS
 
-A voice-enabled AI assistant that combines conversational intelligence, speech processing, and system automation into a unified platform.
+A multi-model voice-enabled AI assistant that combines conversational intelligence, speech processing, and system automation into a unified platform.
 
 Inspired by the idea of interacting with computers through natural language, JARVIS bridges Large Language Models (LLMs), voice interfaces, and real-world actions. Instead of functioning as a simple chatbot, the system integrates speech recognition, text-to-speech synthesis, contextual conversations, and local task execution into a modular architecture.
 
 ---
 
-# Project Overview
+# Table of Contents
+
+1. [Project Overview](#1-project-overview)
+2. [Why This Project Exists](#2-why-this-project-exists)
+3. [Core Capabilities](#3-core-capabilities)
+4. [System Architecture](#4-system-architecture)
+5. [Tech Stack](#5-tech-stack)
+6. [Project Structure](#6-project-structure)
+7. [Quick Start](#7-quick-start)
+8. [Configuration](#8-configuration)
+9. [How JARVIS Works](#9-how-jarvis-works)
+10. [Reliability & Failover Design](#10-reliability--failover-design)
+11. [Future Roadmap](#11-future-roadmap)
+12. [Known Limitations](#12-known-limitations)
+13. [Inspiration](#13-inspiration)
+14. [License](#14-license)
+
+---
+
+# 1. Project Overview
 
 JARVIS was built as an exploration of AI system design beyond traditional chatbot interfaces.
 
@@ -22,7 +41,7 @@ The goal is to create an assistant capable of understanding requests, reasoning 
 
 ---
 
-# Why This Project Exists
+# 2. Why This Project Exists
 
 Most AI assistants are either simple chatbots or isolated voice interfaces.
 
@@ -40,7 +59,7 @@ JARVIS serves as both a personal productivity assistant and a playground for exp
 
 ---
 
-# Core Capabilities
+# 3. Core Capabilities
 
 ## Conversational AI
 
@@ -79,7 +98,7 @@ Current automation capabilities include:
 
 ---
 
-# System Architecture
+# 4. System Architecture
 
 ```text
 User Voice
@@ -116,19 +135,19 @@ The assistant determines whether a request should be handled locally through aut
 
 ---
 
-# Tech Stack
+# 5. Tech Stack
 
 ## AI & Language Models
 
-* OpenRouter for model routing and provider abstraction
+* OpenRouter
 * Gemini 2.5 Flash
 * GPT-4o Mini
 * DeepSeek Chat
 
 ## Voice Processing
 
-* RealtimeSTT for real-time speech recognition
-* ElevenLabs for low-latency voice synthesis
+* RealtimeSTT
+* ElevenLabs
 
 ## Core Development
 
@@ -144,7 +163,7 @@ The assistant determines whether a request should be handled locally through aut
 
 ---
 
-# Project Structure
+# 6. Project Structure
 
 ```text
 JARVIS/
@@ -162,6 +181,7 @@ JARVIS/
 │
 ├── config.py
 ├── main.py
+├── requirements.txt
 └── README.md
 ```
 
@@ -196,7 +216,7 @@ JARVIS/
 
 ---
 
-# Quick Start
+# 7. Quick Start
 
 ## Prerequisites
 
@@ -242,7 +262,6 @@ Create a `.env` file in the project root:
 
 ```env
 OPENROUTER_KEY=your_openrouter_key
-
 ELEVENLABS_KEY=your_elevenlabs_key
 ```
 
@@ -268,7 +287,7 @@ mode when prompted.
 
 ---
 
-# Configuration
+# 8. Configuration
 
 Model priority can be configured through:
 
@@ -284,14 +303,14 @@ JARVIS automatically switches to the next available model if the current provide
 
 ---
 
-# How JARVIS Works
+# 9. How JARVIS Works
 
 For every user request:
 
 1. User speech is transcribed in real time using RealtimeSTT (audio mode).
 2. Commands are checked against the automation layer.
 3. If no automation command matches, the request is routed to the AI reasoning engine.
-4. The request is sent through OpenRouter to the currently active model (Gemini, GPT-4o Mini, or DeepSeek).
+4. The request is sent through OpenRouter to the currently active model.
 5. The selected model generates a streamed response.
 6. Responses are synthesized into natural speech using ElevenLabs.
 7. Conversation history is preserved for the current session.
@@ -300,7 +319,7 @@ This architecture keeps simple actions local while reserving LLM usage for reaso
 
 ---
 
-# Reliability & Failover Design
+# 10. Reliability & Failover Design
 
 Most AI assistants depend on a single provider, making them vulnerable to outages, rate limits, and service disruptions.
 
@@ -325,7 +344,7 @@ This architecture improves availability and provides a more resilient user exper
 
 ---
 
-# Future Roadmap
+# 11. Future Roadmap
 
 ## Phase 1 — Memory
 
@@ -354,7 +373,7 @@ This architecture improves availability and provides a more resilient user exper
 
 ---
 
-# Known Limitations
+# 12. Known Limitations
 
 Current limitations include:
 
@@ -368,7 +387,7 @@ These limitations are intentional and are part of the planned roadmap for future
 
 ---
 
-# Inspiration
+# 13. Inspiration
 
 Like many people interested in technology, I grew up fascinated by Tony Stark's JARVIS and the idea of interacting with computers through natural conversation.
 
@@ -376,6 +395,6 @@ This project is my attempt to bring a small piece of that vision into reality wh
 
 ---
 
-# License
+# 14. License
 
 This project is intended for educational, research, and personal use.
