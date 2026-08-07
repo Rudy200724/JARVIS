@@ -11,19 +11,13 @@ class Assistant:
         self.stt=None
         self.tts=None
     
-    def process_response(self,user_input):
-
-        print("JARVIS: ",end="")
+    def generate_response(self,user_input:str)->str:
 
         full_reply=[]
 
         for chunk in self.brain.get_response(user_input):
 
-            print(chunk,end="",flush=True)
-
             full_reply.append(chunk)
-
-        print()
 
         return "".join(full_reply)
     
@@ -43,14 +37,10 @@ class Assistant:
             
             if user_input.lower() in ["exit","shutdown","quit"]:
                 break
-            
-            tool_response=execute_command(user_input)
 
-            if tool_response:
-                print(f"JARVIS: {tool_response}")
-                continue
-            
-            self.process_response(user_input)
+            reply = self.chat(user_input)
+
+            print(f"JARVIS: {reply}")
     
     def run_audio_mode(self):
 
@@ -71,16 +61,17 @@ class Assistant:
 
             print(f"You: {user_input}")
 
-            tool_response = execute_command(user_input)
+            reply=self.chat(user_input)
 
-            if tool_response:
-
-                print(f"JARVIS: {tool_response}")
-
-                self.tts.speak(tool_response)
-
-                continue
-
-            reply=self.process_response(user_input)
+            print(f"JARVIS: {reply}")
             
             self.tts.speak(reply)
+
+    def chat(self,user_input:str)->str:
+
+        tool_response = execute_command(user_input)
+
+        if tool_response:
+            return tool_response
+
+        return self.generate_response(user_input)

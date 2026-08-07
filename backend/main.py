@@ -1,27 +1,18 @@
 from core.assistant import Assistant
+from fastapi import FastAPI
 
-def main():
-    assistant=Assistant()
 
-    try:
-        while True:
-            mode=input("Choose mode (text/audio): ").lower()
+app=FastAPI()
 
-            if mode=="text":
+assistant=Assistant()
 
-                assistant.run_text_mode()
-                break
+@app.get("/")
+def root():
+    return {"message": "JARVIS Backend Running"}
 
-            elif mode=="audio":
+@app.post("/chat")
+def chat(request):
 
-                assistant.run_audio_mode()
-                break
+    reply=assistant.chat(request.message)
 
-            else:
-                print("Invalid mode.")
-    
-    finally:
-        assistant.shutdown()
-
-if __name__=="__main__":
-    main()
+    return {"response":reply}
