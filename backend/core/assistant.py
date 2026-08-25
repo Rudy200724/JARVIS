@@ -75,3 +75,13 @@ class Assistant:
             return tool_response
 
         return self.generate_response(user_input)
+
+    def stream_response(self, user_input: str):
+
+        tool_response = execute_command(user_input)
+
+        if tool_response:
+            yield tool_response
+            return
+
+        yield from self.brain.get_response(user_input)

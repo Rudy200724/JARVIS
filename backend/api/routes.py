@@ -1,4 +1,5 @@
 from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
 from api.schemas import ChatRequest, ChatResponse
 from core.assistant import Assistant
 
@@ -6,9 +7,10 @@ router=APIRouter()
 
 assistant=Assistant()
 
-@router.post("/chat",response_model=ChatResponse)
+@router.post("/chat")
 def chat(request:ChatRequest):
 
-    reply=assistant.chat(request.message)
-
-    return ChatResponse(response=reply)
+    return StreamingResponse(
+        assistant.stream_response(request.message),
+        media_type="text/plain"
+    )
