@@ -2,8 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import Message from "./Message";
-
 function CodeBlock({ className, children }) {
 
     const [copied, setCopied] = useState(false);
@@ -53,67 +51,182 @@ function CodeBlock({ className, children }) {
     );
 }
 
-function ChatWindow({messages, isLoading, error}){
+function ChatWindow({ messages, isLoading, error }) {
 
-    const bottomRef =useRef(null);
+    const bottomRef = useRef(null);
+    const chatWindowRef = useRef(null);
+    const shouldAutoScroll = useRef(true);
+    const [showScrollButton, setShowScrollButton] = useState(false);
 
-    useEffect(() => {
+    function scrollToBottom() {
+
+    shouldAutoScroll.current = true;
+
     bottomRef.current?.scrollIntoView({
         behavior: "smooth"
+    });
+
+    setShowScrollButton(false);
+    }
+
+
+    useEffect(() => {
+
+        const chatWindow = chatWindowRef.current;
+
+        if (!chatWindow) {
+            return;
+        }
+
+        function handleScroll() {
+
+            const distanceFromBottom =
+                chatWindow.scrollHeight -
+                chatWindow.scrollTop -
+                chatWindow.clientHeight;   
+
+            const atBottom = distanceFromBottom <= 50;
+            shouldAutoScroll.current = atBottom;
+
+            setShowScrollButton(!atBottom);
+        }
+ 
+
+        chatWindow.addEventListener(
+            "scroll",
+            handleScroll
+        );
+
+
+        return () => {
+
+            chatWindow.removeEventListener(
+                "scroll",
+                handleScroll
+            );
+
+        };
+
+    }, []);
+
+
+    useEffect(() => {
+
+        if (!shouldAutoScroll.current) {
+            return;
+        }
+
+        bottomRef.current?.scrollIntoView({
+            behavior: "auto"
         });
+
     }, [messages, isLoading]);
 
+
     return (
-        <div className="chat-window">
+
+        <div
+            className="chat-window"
+            ref={chatWindowRef}
+        >
+
             {messages.map((message, index) => (
+
                 <div
                     key={index}
-                    className={`message ${message.sender ==="user" ? "user-message": "jarvis-message"}`}
+                    className={`message ${
+                        message.sender === "user"
+                            ? "user-message"
+                            : "jarvis-message"
+                    }`}
                 >
+
                     <ReactMarkdown
-    remarkPlugins={[remarkGfm]}
-    components={{
-        code({ className, children }) {
-            
-            const isCodeBlock = className?.startsWith("language-");
+                        remarkPlugins={[remarkGfm]}
 
-            if (isCodeBlock) {
-                return (
-                    <CodeBlock
-                        className={className}
+                        components={{
+
+                            code({ className, children }) {
+
+                                const isCodeBlock =
+                                    className?.startsWith(
+                                        "language-"
+                                    );
+
+
+                                if (isCodeBlock) {
+
+                                    return (
+
+                                        <CodeBlock
+                                            className={className}
+                                        >
+                                            {children}
+                                        </CodeBlock>
+
+                                    );
+
+                                }
+
+
+                                return (
+
+                                    <code className={className}>
+                                        {children}
+                                    </code>
+
+                                );
+
+                            }
+
+                        }}
                     >
-                        {children}
-                    </CodeBlock>
-                );
-            }
 
-            return (
-                <code className={className}>
-                    {children}
-                </code>
-            );
-        }
-    }}
-    >
-    {message.text}
-</ReactMarkdown>
+                        {message.text}
+
+                    </ReactMarkdown>
+
                 </div>
+
             ))}
 
+
             {isLoading && (
+
                 <div className="jarvis-thinking">
                     <span></span>
                     <span></span>
                     <span></span>
                 </div>
+
             )}
+
+
             {error && (
+
                 <div className="jarvis-error">
                     {error}
                 </div>
+
             )}
-            <div ref={bottomRef}/>
+
+            {showScrollButton &&(
+                <button
+                    className="scroll-to-bottom"
+                    onClick={scrollToBottom}
+                >
+                    ↓ New messages
+                </button>
+            )}
+
+            {/* Invisible element used as the scroll target */}
+
+            <div ref={bottomRef} />
+
         </div>
+
     );
 }
-export default ChatWindow
+
+
+export default ChatWindow;

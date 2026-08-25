@@ -1,16 +1,34 @@
-*{
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+
+/* ========================= */
+/* GLOBAL                    */
+/* ========================= */
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
 body {
     min-height: 100vh;
     font-family: Arial, Helvetica, sans-serif;
-    transition: 
+
+    transition:
         background-color 0.3s ease,
         color 0.3s ease;
 }
+
+
+/* ========================= */
+/* THEME                     */
+/* ========================= */
 
 @media (prefers-color-scheme: dark) {
 
@@ -30,49 +48,90 @@ body {
 
 }
 
-html,
-body,
-#root {
-    min-height: 100vh;
-}
+
+/* ========================= */
+/* GENERAL                   */
+/* ========================= */
 
 .title {
     text-align: center;
 }
 
-.app{
-    min-height: 100vh;
+
+/* ========================= */
+/* APP LAYOUT                */
+/* ========================= */
+
+.app {
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
 }
 
-.header{
+
+/* ========================= */
+/* HEADER                    */
+/* ========================= */
+
+.header {
     padding: 20px;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.chat-window{
+
+/* ========================= */
+/* CHAT WINDOW               */
+/* ========================= */
+
+.chat-window {
     padding: 20px;
+
     flex: 1;
+    min-height: 0;
+
     display: flex;
     flex-direction: column;
+
     overflow-y: auto;
 }
 
-.message{
+
+/* ========================= */
+/* MESSAGES                  */
+/* ========================= */
+
+.message {
     margin-bottom: 10px;
     padding: 10px 15px;
+
     border-radius: 16px;
+
     max-width: 70%;
-
 }
 
-/* Message appearance animation */
+
+/* ========================= */
+/* JARVIS MESSAGE            */
+/* ========================= */
+
 .jarvis-message {
-    animation: jarvisMessageAppear 0.25s ease-out;
+    align-self: flex-start;
+
+    background: #374151;
+
+    border: 1px solid rgba(255, 255, 255, 0.08);
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.15);
+
+    animation:
+        jarvisMessageAppear 0.25s ease-out;
 }
+
 
 @keyframes jarvisMessageAppear {
+
     from {
         opacity: 0;
         transform: translateY(8px);
@@ -82,18 +141,43 @@ body,
         opacity: 1;
         transform: translateY(0);
     }
-}
 
-.jarvis-message {
-    align-self: flex-start;
-    background: #374151;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    animation: jarvisMessageAppear 0.25s ease-out;
 }
 
 
-/* JARVIS MARKDOWN */
+/* ========================= */
+/* USER MESSAGE              */
+/* ========================= */
+
+.user-message {
+    align-self: flex-end;
+
+    background: #254e86;
+
+    animation:
+        userMessageAppear 0.2s ease-out;
+}
+
+
+@keyframes userMessageAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* ========================= */
+/* JARVIS MARKDOWN           */
+/* ========================= */
+
 .jarvis-message p {
     margin: 0 0 10px 0;
     line-height: 1.5;
@@ -103,11 +187,17 @@ body,
     margin-bottom: 0;
 }
 
+
+/* ========================= */
+/* HEADINGS                  */
+/* ========================= */
+
 .jarvis-message h1,
 .jarvis-message h2,
 .jarvis-message h3 {
     margin-top: 18px;
     margin-bottom: 10px;
+
     line-height: 1.3;
 }
 
@@ -122,6 +212,11 @@ body,
 .jarvis-message h3 {
     font-size: 17px;
 }
+
+
+/* ========================= */
+/* LISTS                    */
+/* ========================= */
 
 .jarvis-message ul,
 .jarvis-message ol {
@@ -139,6 +234,11 @@ body,
     margin-top: 5px;
 }
 
+
+/* ========================= */
+/* TEXT FORMATTING            */
+/* ========================= */
+
 .jarvis-message strong {
     font-weight: 700;
 }
@@ -147,45 +247,92 @@ body,
     font-style: italic;
 }
 
+
+/* ========================= */
+/* INLINE CODE               */
+/* ========================= */
+
 .jarvis-message code {
     background: #1f2937;
+
     padding: 2px 6px;
+
     border-radius: 5px;
-    font-family: Consolas, "Courier New", monospace;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
     font-size: 0.9em;
 }
 
+
+/* ========================= */
+/* CODE BLOCK                */
+/* ========================= */
+
 .jarvis-code-block {
     position: relative;
+
     margin: 14px 0;
+
     border-radius: 9px;
+
     overflow: hidden;
+
     background: #111827;
+
     border: 1px solid #374151;
 }
 
+
+/* Code header */
+
 .jarvis-code-header {
     display: flex;
+
     align-items: center;
     justify-content: space-between;
+
     padding: 7px 10px;
+
     background: #1f2937;
-    border-bottom: 1px solid #374151;
+
+    border-bottom:
+        1px solid #374151;
 }
+
+
+/* Language */
 
 .jarvis-code-language {
     font-size: 12px;
+
     color: #9ca3af;
-    font-family: Arial, Helvetica, sans-serif;
+
+    font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
 }
+
+
+/* Copy button */
 
 .copy-button {
     border: none;
+
     border-radius: 5px;
+
     padding: 4px 9px;
+
     background: #374151;
+
     color: #d1d5db;
+
     font-size: 12px;
+
     cursor: pointer;
 }
 
@@ -193,29 +340,56 @@ body,
     background: #4b5563;
 }
 
+
+/* Code content */
+
 .jarvis-code-block pre {
     margin: 0;
+
     padding: 14px;
+
     overflow-x: auto;
 }
 
 .jarvis-code-block pre code {
     background: none;
+
     padding: 0;
-    font-family: Consolas, "Courier New", monospace;
+
+    font-family:
+        Consolas,
+        "Courier New",
+        monospace;
+
     font-size: 14px;
+
     line-height: 1.5;
 }
 
+
+/* ========================= */
+/* BLOCKQUOTES               */
+/* ========================= */
+
 .jarvis-message blockquote {
     margin: 12px 0;
+
     padding-left: 12px;
-    border-left: 3px solid #6b7280;
+
+    border-left:
+        3px solid #6b7280;
+
     color: #d1d5db;
 }
 
+
+/* ========================= */
+/* LINKS                     */
+/* ========================= */
+
 .jarvis-message a {
     color: #93c5fd;
+
     text-decoration: underline;
 }
 
@@ -223,89 +397,128 @@ body,
     color: #bfdbfe;
 }
 
+
+/* ========================= */
+/* TABLES                    */
+/* ========================= */
+
 .jarvis-message table {
     width: 100%;
+
     border-collapse: collapse;
+
     margin: 12px 0;
 }
 
 .jarvis-message th,
 .jarvis-message td {
-    border: 1px solid #4b5563;
+    border:
+        1px solid #4b5563;
+
     padding: 7px 10px;
+
     text-align: left;
 }
 
 .jarvis-message th {
     background: #1f2937;
 }
-.user-message{
-    align-self: flex-end;
-    background: #254e86;
-    animation: userMessageAppear 0.2s ease-out;
-}
 
-.user-message {
-    animation: userMessageAppear 0.2s ease-out;
-}
 
-@keyframes userMessageAppear {
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
+/* ========================= */
+/* INPUT AREA                */
+/* ========================= */
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.input-message{
-    flex: 1;
-    padding: 12px 15px;
-    border-radius: 50px;
-    border: 1px solid #374151;
-    background: #1f2937;
-    color: white;
-    font-size: 16px;
-    outline: none;
-}
-
-.input-box{
+.input-box {
     display: flex;
+
     align-items: center;
+
     gap: 10px;
+
     padding: 15px 20px;
 }
 
-.send-button{
-    padding: 0 18px;
-    border: none;
+
+/* ========================= */
+/* INPUT                     */
+/* ========================= */
+
+.input-message {
+    flex: 1;
+
+    padding: 12px 15px;
+
     border-radius: 50px;
-    background: #2654b9;
+
+    border:
+        1px solid #374151;
+
+    background: #1f2937;
+
     color: white;
+
+    font-size: 16px;
+
+    outline: none;
+}
+
+
+/* ========================= */
+/* SEND BUTTON               */
+/* ========================= */
+
+.send-button {
+    padding: 0 18px;
+
+    border: none;
+
+    border-radius: 50px;
+
+    background: #2654b9;
+
+    color: white;
+
     font-size: 18px;
+
     cursor: pointer;
+
     width: 56px;
     height: 45px;
 }
 
+
+/* ========================= */
+/* THINKING ANIMATION        */
+/* ========================= */
+
 .jarvis-thinking {
     align-self: flex-start;
+
     display: flex;
+
     align-items: center;
+
     gap: 5px;
+
     padding: 10px 14px;
 }
+
 
 .jarvis-thinking span {
     width: 7px;
     height: 7px;
+
     background: #9ca3af;
+
     border-radius: 50%;
-    animation: jarvis-pulse 1.4s infinite ease-in-out;
+
+    animation:
+        jarvis-pulse 1.4s
+        infinite
+        ease-in-out;
 }
+
 
 .jarvis-thinking span:nth-child(2) {
     animation-delay: 0.2s;
@@ -315,8 +528,12 @@ body,
     animation-delay: 0.4s;
 }
 
+
 @keyframes jarvis-pulse {
-    0%, 60%, 100% {
+
+    0%,
+    60%,
+    100% {
         transform: translateY(0);
         opacity: 0.35;
     }
@@ -325,12 +542,81 @@ body,
         transform: translateY(-5px);
         opacity: 1;
     }
+
 }
+
+/* ========================= */
+/* ERROR                     */
+/* ========================= */
 
 .jarvis-error {
     align-self: flex-start;
+
     margin-top: 5px;
+
     padding: 8px 12px;
+
     color: #fca5a5;
+
     font-size: 14px;
+}
+
+/* ========================= */
+/* SCROLL TO BOTTOM          */
+/* ========================= */
+
+.scroll-to-bottom {
+    position: sticky;
+    bottom: 15px;
+
+    align-self: center;
+
+    margin-top: 10px;
+    padding: 8px 14px;
+
+    border: 1px solid rgba(147, 197, 253, 0.25);
+    border-radius: 50px;
+
+    background: #2f64a8;
+    color: white;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 14px rgba(0, 0, 0, 0.3);
+
+    z-index: 10;
+
+    animation: scrollButtonAppear 0.2s ease-out;
+
+    transition:
+        background-color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.scroll-to-bottom:hover {
+    background: #3b76bd;
+
+    transform: translateY(-2px);
+
+    box-shadow:
+        0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+@keyframes scrollButtonAppear {
+
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
 }
