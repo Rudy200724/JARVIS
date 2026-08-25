@@ -1,202 +1,894 @@
+/* =========================================================
+   J.A.R.V.I.S — COMMAND CENTER
+   ========================================================= */
+
+@import url(
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@500;600;700&display=swap'
+);
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-
-/* ========================= */
-/* GLOBAL                    */
-/* ========================= */
-
 html,
 body,
 #root {
+    width: 100%;
     height: 100%;
-    margin: 0;
 }
 
 body {
-    min-height: 100vh;
-    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
 
-    transition:
-        background-color 0.3s ease,
-        color 0.3s ease;
+    font-family:
+        "Inter",
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    color: #eaf6ff;
+
+    background: #020811;
 }
 
 
-/* ========================= */
-/* THEME                     */
-/* ========================= */
-
-@media (prefers-color-scheme: dark) {
-
-    body {
-        background: black;
-        color: white;
-    }
-
-}
-
-@media (prefers-color-scheme: light) {
-
-    body {
-        background: white;
-        color: black;
-    }
-
-}
-
-
-/* ========================= */
-/* GENERAL                   */
-/* ========================= */
-
-.title {
-    text-align: center;
-}
-
-
-/* ========================= */
-/* APP LAYOUT                */
-/* ========================= */
+/* =========================================================
+   APP
+   ========================================================= */
 
 .app {
+    position: relative;
+
+    width: 100%;
     height: 100vh;
+
+    display: flex;
+
+    overflow: hidden;
+
+    background:
+        radial-gradient(
+            circle at 82% 18%,
+            rgba(0, 125, 255, 0.16),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 70% 75%,
+            rgba(0, 75, 170, 0.08),
+            transparent 35%
+        ),
+        #020811;
+}
+
+
+/* =========================================================
+   AMBIENT LIGHT
+   ========================================================= */
+
+.ambient-glow {
+    position: absolute;
+
+    width: 650px;
+    height: 650px;
+
+    top: -260px;
+    right: -150px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 150, 255, 0.30),
+            rgba(0, 100, 220, 0.10) 35%,
+            transparent 70%
+        );
+
+    filter: blur(30px);
+
+    pointer-events: none;
+
+    animation:
+        ambientLight 8s
+        ease-in-out
+        infinite;
+}
+
+@keyframes ambientLight {
+    0%,
+    100% {
+        opacity: 0.65;
+
+        transform:
+            scale(0.95)
+            translate(0, 0);
+    }
+
+    50% {
+        opacity: 1;
+
+        transform:
+            scale(1.08)
+            translate(-25px, 20px);
+    }
+}
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
+
+.sidebar {
+    position: relative;
+
+    flex-shrink: 0;
+
+    width: 205px;
+    height: 100vh;
+
+    padding: 28px 18px;
+
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+
+    border-right:
+        1px solid rgba(50, 150, 255, 0.13);
+
+    background:
+        linear-gradient(
+            180deg,
+            rgba(3, 12, 24, 0.94),
+            rgba(1, 7, 15, 0.98)
+        );
+
+    box-shadow:
+        inset -1px 0 rgba(255, 255, 255, 0.015),
+        15px 0 60px rgba(0, 80, 160, 0.04);
+
+    z-index: 10;
 }
 
 
-/* ========================= */
-/* HEADER                    */
-/* ========================= */
+/* =========================================================
+   SIDEBAR BRAND
+   ========================================================= */
+
+.sidebar-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding-bottom: 28px;
+
+    border-bottom:
+        1px solid rgba(80, 170, 255, 0.09);
+}
+
+.core-logo {
+    position: relative;
+
+    width: 74px;
+    height: 74px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 10px;
+
+    border-radius: 50%;
+
+    border:
+        1px solid rgba(50, 170, 255, 0.55);
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(50, 170, 255, 0.35),
+            rgba(10, 70, 130, 0.12) 45%,
+            transparent 70%
+        );
+
+    box-shadow:
+        0 0 20px rgba(0, 130, 255, 0.20),
+        inset 0 0 20px rgba(0, 130, 255, 0.15);
+
+    animation:
+        coreBreath 4s
+        ease-in-out
+        infinite;
+}
+
+.core-logo::before,
+.core-logo::after {
+    content: "";
+
+    position: absolute;
+
+    border-radius: 50%;
+
+    border:
+        1px solid rgba(70, 190, 255, 0.25);
+}
+
+.core-logo::before {
+    inset: 8px;
+}
+
+.core-logo::after {
+    inset: 18px;
+
+    border-color:
+        rgba(100, 220, 255, 0.55);
+
+    box-shadow:
+        0 0 14px rgba(50, 190, 255, 0.35);
+}
+
+.core-logo-inner {
+    width: 14px;
+    height: 14px;
+
+    border-radius: 50%;
+
+    background:
+        #57c8ff;
+
+    box-shadow:
+        0 0 10px #4dc5ff,
+        0 0 25px rgba(50, 180, 255, 0.8);
+}
+
+@keyframes coreBreath {
+    0%,
+    100% {
+        transform: scale(0.97);
+
+        box-shadow:
+            0 0 20px rgba(0, 130, 255, 0.20),
+            inset 0 0 20px rgba(0, 130, 255, 0.15);
+    }
+
+    50% {
+        transform: scale(1.03);
+
+        box-shadow:
+            0 0 30px rgba(0, 150, 255, 0.30),
+            inset 0 0 25px rgba(0, 130, 255, 0.20);
+    }
+}
+
+.sidebar-brand-name {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 13px;
+
+    letter-spacing: 0.22em;
+
+    padding-left: 0.22em;
+
+    color: #eaf7ff;
+}
+
+.sidebar-brand-subtitle {
+    margin-top: 6px;
+
+    color: #00aaff;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.15em;
+}
+
+
+/* =========================================================
+   SIDEBAR NAV
+   ========================================================= */
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+
+    gap: 8px;
+
+    margin-top: 28px;
+}
+
+.nav-item {
+    position: relative;
+
+    width: 100%;
+
+    min-height: 52px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 8px 14px;
+
+    border: none;
+
+    border-radius: 12px;
+
+    background: transparent;
+
+    color: rgba(100, 200, 255, 0.75);
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.08em;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.nav-item:hover {
+    color: #eaf8ff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(20, 110, 190, 0.14),
+            transparent
+        );
+
+    transform: translateX(2px);
+}
+
+.nav-item.active {
+    color: #55c9ff;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(15, 110, 190, 0.20),
+            rgba(15, 80, 140, 0.04)
+        );
+
+    box-shadow:
+        inset 3px 0 #0eaaff,
+        0 0 25px rgba(0, 130, 255, 0.05);
+}
+
+.nav-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(40, 160, 255, 0.30);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0, 130, 255, 0.18),
+            rgba(0, 50, 100, 0.08)
+        );
+
+    color: #53c8ff;
+
+    box-shadow:
+        0 0 12px rgba(0, 120, 255, 0.06);
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* =========================================================
+   LUCIDE SIDEBAR ICONS
+   ========================================================= */
+
+.nav-icon svg {
+    width: 18px;
+    height: 18px;
+
+    stroke-width: 1.7;
+
+    color: currentColor;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.nav-item:hover .nav-icon {
+    border-color:
+        rgba(60, 190, 255, 0.65);
+
+    box-shadow:
+        0 0 15px rgba(0, 150, 255, 0.15);
+}
+
+.nav-item:hover .nav-icon svg {
+    transform: scale(1.08);
+
+    filter:
+        drop-shadow(
+            0 0 5px rgba(60, 200, 255, 0.7)
+        );
+}
+
+.nav-item.active .nav-icon {
+    border-color:
+        rgba(70, 205, 255, 0.75);
+
+    box-shadow:
+        0 0 18px rgba(0, 150, 255, 0.18);
+}
+
+
+/* =========================================================
+   SIDEBAR BOTTOM
+   ========================================================= */
+
+.sidebar-bottom {
+    margin-top: auto;
+
+    padding-top: 20px;
+
+    border-top:
+        1px solid rgba(80, 170, 255, 0.08);
+}
+
+
+/* =========================================================
+   MAIN AREA
+   ========================================================= */
+
+.main-area {
+    position: relative;
+
+    flex: 1;
+    min-width: 0;
+
+    height: 100vh;
+
+    padding: 16px 18px 16px 12px;
+}
+
+.main-panel {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border:
+        1px solid rgba(50, 160, 255, 0.20);
+
+    border-radius: 22px;
+
+    background:
+        radial-gradient(
+            circle at 82% 0%,
+            rgba(0, 125, 255, 0.12),
+            transparent 28%
+        ),
+        linear-gradient(
+            145deg,
+            rgba(2, 13, 25, 0.98),
+            rgba(1, 8, 16, 0.98)
+        );
+
+    box-shadow:
+        0 0 70px rgba(0, 80, 160, 0.07),
+        inset 0 1px rgba(255, 255, 255, 0.025);
+}
+
+
+/* =========================================================
+   UPPER-RIGHT LIGHT
+   ========================================================= */
+
+.main-panel::before {
+    content: "";
+
+    position: absolute;
+
+    width: 600px;
+    height: 160px;
+
+    top: -90px;
+    right: -120px;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 20%,
+            rgba(0, 140, 255, 0.12),
+            transparent 70%
+        );
+
+    transform: rotate(-8deg);
+
+    filter: blur(18px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
 
 .header {
-    padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+
+    flex-shrink: 0;
+
+    height: 125px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    border-bottom:
+        1px solid rgba(70, 170, 255, 0.10);
+
+    z-index: 5;
+}
+
+.system-label {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    margin-bottom: 7px;
+
+    color: #42c7ff;
+
+    font-size: 9px;
+
+    font-weight: 600;
+
+    letter-spacing: 0.22em;
+
+    text-shadow:
+        0 0 10px rgba(0, 170, 255, 0.5);
+}
+
+.system-dot,
+.status-dot {
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: #24d88b;
+
+    box-shadow:
+        0 0 8px rgba(30, 230, 150, 0.8);
+
+    animation:
+        statusPulse 2s
+        ease-in-out
+        infinite;
+}
+
+@keyframes statusPulse {
+    0%,
+    100% {
+        opacity: 0.55;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
+.title {
+    font-family: "Orbitron", sans-serif;
+
+    font-size: clamp(24px, 2.5vw, 38px);
+
+    font-weight: 600;
+
+    letter-spacing: 0.30em;
+
+    padding-left: 0.30em;
+
+    color: #f1faff;
+
+    text-shadow:
+        0 0 10px rgba(100, 200, 255, 0.55),
+        0 0 30px rgba(50, 160, 255, 0.18);
+}
+
+.header-line {
+    position: absolute;
+
+    bottom: -1px;
+
+    left: 50%;
+
+    width: 140px;
+    height: 1px;
+
+    transform: translateX(-50%);
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #28baff,
+            transparent
+        );
+
+    box-shadow:
+        0 0 12px rgba(30, 170, 255, 0.8);
 }
 
 
-/* ========================= */
-/* CHAT WINDOW               */
-/* ========================= */
+/* =========================================================
+   CHAT CONTAINER
+   ========================================================= */
 
-.chat-window {
-    padding: 20px;
+.chat-container {
+    position: relative;
 
     flex: 1;
     min-height: 0;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            rgba(2, 11, 20, 0.20),
+            rgba(1, 7, 14, 0.30)
+        );
+}
+
+.chat-container::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    background-image:
+        linear-gradient(
+            rgba(60, 170, 255, 0.025) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(60, 170, 255, 0.025) 1px,
+            transparent 1px
+        );
+
+    background-size: 44px 44px;
+}
+
+
+/* =========================================================
+   CHAT WINDOW
+   ========================================================= */
+
+.chat-window {
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    padding:
+        35px
+        clamp(20px, 5vw, 70px)
+        25px;
 
     display: flex;
     flex-direction: column;
 
     overflow-y: auto;
+
+    scroll-behavior: smooth;
+
+    scrollbar-width: thin;
+
+    scrollbar-color:
+        rgba(60, 170, 255, 0.30)
+        transparent;
+
+    z-index: 2;
+}
+
+.chat-window::-webkit-scrollbar {
+    width: 5px;
+}
+
+.chat-window::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chat-window::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+
+    background:
+        rgba(60, 170, 255, 0.28);
+}
+
+.chat-window::-webkit-scrollbar-thumb:hover {
+    background:
+        rgba(60, 180, 255, 0.50);
 }
 
 
-/* ========================= */
-/* MESSAGES                  */
-/* ========================= */
+/* =========================================================
+   MESSAGES
+   ========================================================= */
 
 .message {
-    margin-bottom: 10px;
-    padding: 10px 15px;
+    position: relative;
 
-    border-radius: 16px;
+    max-width: min(68%, 720px);
 
-    max-width: 70%;
+    margin-bottom: 20px;
+
+    padding: 15px 18px;
+
+    border-radius: 17px;
+
+    font-size: 15px;
+
+    line-height: 1.6;
+
+    word-wrap: break-word;
+
+    animation:
+        messageAppear
+        0.28s
+        cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes messageAppear {
+    from {
+        opacity: 0;
+
+        transform:
+            translateY(10px)
+            scale(0.985);
+    }
+
+    to {
+        opacity: 1;
+
+        transform:
+            translateY(0)
+            scale(1);
+    }
 }
 
 
-/* ========================= */
-/* JARVIS MESSAGE            */
-/* ========================= */
+/* =========================================================
+   JARVIS MESSAGE
+   ========================================================= */
 
 .jarvis-message {
     align-self: flex-start;
 
-    background: #374151;
+    color: #e0edf7;
 
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background:
+        linear-gradient(
+            135deg,
+            rgba(7, 25, 43, 0.96),
+            rgba(5, 17, 30, 0.96)
+        );
+
+    border:
+        1px solid rgba(40, 150, 230, 0.15);
+
+    border-bottom-left-radius: 5px;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15);
+        0 10px 35px rgba(0, 0, 0, 0.25),
+        inset 0 1px rgba(255, 255, 255, 0.025);
+}
 
-    animation:
-        jarvisMessageAppear 0.25s ease-out;
+.jarvis-message::before {
+    content: "J.A.R.V.I.S";
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #35bfff;
+
+    font-family: "Orbitron", sans-serif;
+
+    font-size: 8px;
+
+    letter-spacing: 0.18em;
+
+    text-shadow:
+        0 0 8px rgba(30, 180, 255, 0.4);
 }
 
 
-@keyframes jarvisMessageAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-}
-
-
-/* ========================= */
-/* USER MESSAGE              */
-/* ========================= */
+/* =========================================================
+   USER MESSAGE
+   ========================================================= */
 
 .user-message {
     align-self: flex-end;
 
-    background: #254e86;
+    color: #ecf8ff;
 
-    animation:
-        userMessageAppear 0.2s ease-out;
+    background:
+        linear-gradient(
+            135deg,
+            rgba(13, 87, 150, 0.94),
+            rgba(8, 53, 100, 0.94)
+        );
+
+    border:
+        1px solid rgba(35, 165, 255, 0.35);
+
+    border-bottom-right-radius: 5px;
+
+    box-shadow:
+        0 10px 30px rgba(0, 60, 120, 0.18),
+        0 0 18px rgba(0, 130, 255, 0.04);
 }
 
 
-@keyframes userMessageAppear {
-
-    from {
-        opacity: 0;
-        transform: translateY(5px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-
-}
-
-
-/* ========================= */
-/* JARVIS MARKDOWN           */
-/* ========================= */
+/* =========================================================
+   MARKDOWN
+   ========================================================= */
 
 .jarvis-message p {
-    margin: 0 0 10px 0;
-    line-height: 1.5;
+    margin: 0 0 10px;
+
+    line-height: 1.65;
 }
 
 .jarvis-message p:last-child {
     margin-bottom: 0;
 }
 
-
-/* ========================= */
-/* HEADINGS                  */
-/* ========================= */
-
 .jarvis-message h1,
 .jarvis-message h2,
 .jarvis-message h3 {
-    margin-top: 18px;
+    margin-top: 20px;
     margin-bottom: 10px;
+
+    color: #f0f8ff;
 
     line-height: 1.3;
 }
@@ -213,51 +905,48 @@ body {
     font-size: 17px;
 }
 
-
-/* ========================= */
-/* LISTS                    */
-/* ========================= */
-
 .jarvis-message ul,
 .jarvis-message ol {
     margin: 10px 0;
-    padding-left: 25px;
+
+    padding-left: 24px;
 }
 
 .jarvis-message li {
     margin-bottom: 5px;
-    line-height: 1.45;
 }
-
-.jarvis-message li > ul,
-.jarvis-message li > ol {
-    margin-top: 5px;
-}
-
-
-/* ========================= */
-/* TEXT FORMATTING            */
-/* ========================= */
 
 .jarvis-message strong {
-    font-weight: 700;
+    color: #f4fbff;
 }
 
-.jarvis-message em {
-    font-style: italic;
+.jarvis-message a {
+    color: #60caff;
+
+    text-decoration: none;
+}
+
+.jarvis-message a:hover {
+    text-decoration: underline;
 }
 
 
-/* ========================= */
-/* INLINE CODE               */
-/* ========================= */
+/* =========================================================
+   INLINE CODE
+   ========================================================= */
 
 .jarvis-message code {
-    background: #1f2937;
+    padding: 3px 7px;
 
-    padding: 2px 6px;
+    border:
+        1px solid rgba(70, 160, 220, 0.12);
 
-    border-radius: 5px;
+    border-radius: 6px;
+
+    background:
+        rgba(1, 8, 15, 0.90);
+
+    color: #8ed6ff;
 
     font-family:
         Consolas,
@@ -268,26 +957,25 @@ body {
 }
 
 
-/* ========================= */
-/* CODE BLOCK                */
-/* ========================= */
+/* =========================================================
+   CODE BLOCK
+   ========================================================= */
 
 .jarvis-code-block {
     position: relative;
 
-    margin: 14px 0;
-
-    border-radius: 9px;
+    margin: 15px 0;
 
     overflow: hidden;
 
-    background: #111827;
+    border:
+        1px solid rgba(50, 150, 230, 0.14);
 
-    border: 1px solid #374151;
+    border-radius: 11px;
+
+    background:
+        rgba(1, 8, 15, 0.96);
 }
-
-
-/* Code header */
 
 .jarvis-code-header {
     display: flex;
@@ -295,328 +983,739 @@ body {
     align-items: center;
     justify-content: space-between;
 
-    padding: 7px 10px;
+    padding: 8px 11px;
 
-    background: #1f2937;
+    background:
+        rgba(20, 70, 110, 0.18);
 
     border-bottom:
-        1px solid #374151;
+        1px solid rgba(70, 160, 220, 0.10);
 }
-
-
-/* Language */
 
 .jarvis-code-language {
-    font-size: 12px;
+    color: rgba(150, 205, 235, 0.65);
 
-    color: #9ca3af;
+    font-size: 11px;
 
-    font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+    letter-spacing: 0.08em;
+
+    text-transform: uppercase;
 }
 
-
-/* Copy button */
-
 .copy-button {
-    border: none;
-
-    border-radius: 5px;
-
     padding: 4px 9px;
 
-    background: #374151;
+    border:
+        1px solid rgba(80, 170, 230, 0.15);
 
-    color: #d1d5db;
+    border-radius: 6px;
 
-    font-size: 12px;
+    background:
+        rgba(40, 120, 180, 0.15);
+
+    color: #bde4fa;
 
     cursor: pointer;
 }
 
 .copy-button:hover {
-    background: #4b5563;
+    background:
+        rgba(40, 140, 210, 0.28);
 }
-
-
-/* Code content */
 
 .jarvis-code-block pre {
     margin: 0;
 
-    padding: 14px;
+    padding: 15px;
 
     overflow-x: auto;
 }
 
 .jarvis-code-block pre code {
-    background: none;
-
     padding: 0;
 
-    font-family:
-        Consolas,
-        "Courier New",
-        monospace;
+    border: none;
 
-    font-size: 14px;
+    background: none;
 
-    line-height: 1.5;
+    color: #d9edf9;
+
+    font-size: 13px;
+
+    line-height: 1.55;
 }
 
 
-/* ========================= */
-/* BLOCKQUOTES               */
-/* ========================= */
+/* =========================================================
+   BLOCKQUOTE
+   ========================================================= */
 
 .jarvis-message blockquote {
-    margin: 12px 0;
+    margin: 13px 0;
 
-    padding-left: 12px;
+    padding:
+        8px 14px;
 
     border-left:
-        3px solid #6b7280;
+        2px solid rgba(50, 180, 255, 0.45);
 
-    color: #d1d5db;
+    color: #b9d3e4;
 }
 
 
-/* ========================= */
-/* LINKS                     */
-/* ========================= */
-
-.jarvis-message a {
-    color: #93c5fd;
-
-    text-decoration: underline;
-}
-
-.jarvis-message a:hover {
-    color: #bfdbfe;
-}
-
-
-/* ========================= */
-/* TABLES                    */
-/* ========================= */
+/* =========================================================
+   TABLES
+   ========================================================= */
 
 .jarvis-message table {
     width: 100%;
 
-    border-collapse: collapse;
+    margin: 14px 0;
 
-    margin: 12px 0;
+    border-collapse: collapse;
 }
 
 .jarvis-message th,
 .jarvis-message td {
-    border:
-        1px solid #4b5563;
+    padding: 8px 10px;
 
-    padding: 7px 10px;
+    border:
+        1px solid rgba(70, 160, 220, 0.12);
 
     text-align: left;
 }
 
 .jarvis-message th {
-    background: #1f2937;
+    background:
+        rgba(30, 100, 160, 0.18);
 }
 
 
-/* ========================= */
-/* INPUT AREA                */
-/* ========================= */
-
-.input-box {
-    display: flex;
-
-    align-items: center;
-
-    gap: 10px;
-
-    padding: 15px 20px;
-}
-
-
-/* ========================= */
-/* INPUT                     */
-/* ========================= */
-
-.input-message {
-    flex: 1;
-
-    padding: 12px 15px;
-
-    border-radius: 50px;
-
-    border:
-        1px solid #374151;
-
-    background: #1f2937;
-
-    color: white;
-
-    font-size: 16px;
-
-    outline: none;
-}
-
-
-/* ========================= */
-/* SEND BUTTON               */
-/* ========================= */
-
-.send-button {
-    padding: 0 18px;
-
-    border: none;
-
-    border-radius: 50px;
-
-    background: #2654b9;
-
-    color: white;
-
-    font-size: 18px;
-
-    cursor: pointer;
-
-    width: 56px;
-    height: 45px;
-}
-
-
-/* ========================= */
-/* THINKING ANIMATION        */
-/* ========================= */
+/* =========================================================
+   THINKING
+   ========================================================= */
 
 .jarvis-thinking {
     align-self: flex-start;
 
     display: flex;
-
     align-items: center;
 
     gap: 5px;
 
-    padding: 10px 14px;
+    margin-bottom: 18px;
+
+    padding: 12px 15px;
+
+    border:
+        1px solid rgba(50, 170, 240, 0.10);
+
+    border-radius: 14px;
+
+    background:
+        rgba(10, 35, 55, 0.70);
 }
 
-
 .jarvis-thinking span {
-    width: 7px;
-    height: 7px;
-
-    background: #9ca3af;
+    width: 6px;
+    height: 6px;
 
     border-radius: 50%;
 
+    background: #43c7ff;
+
+    box-shadow:
+        0 0 9px rgba(40, 190, 255, 0.75);
+
     animation:
-        jarvis-pulse 1.4s
+        jarvisPulse
+        1.4s
         infinite
         ease-in-out;
 }
 
-
 .jarvis-thinking span:nth-child(2) {
-    animation-delay: 0.2s;
+    animation-delay: 0.18s;
 }
 
 .jarvis-thinking span:nth-child(3) {
-    animation-delay: 0.4s;
+    animation-delay: 0.36s;
 }
 
-
-@keyframes jarvis-pulse {
-
+@keyframes jarvisPulse {
     0%,
     60%,
     100% {
         transform: translateY(0);
-        opacity: 0.35;
+        opacity: 0.3;
     }
 
     30% {
         transform: translateY(-5px);
         opacity: 1;
     }
-
 }
 
-/* ========================= */
-/* ERROR                     */
-/* ========================= */
+
+/* =========================================================
+   ERROR
+   ========================================================= */
 
 .jarvis-error {
     align-self: flex-start;
 
-    margin-top: 5px;
+    padding: 9px 13px;
 
-    padding: 8px 12px;
+    border:
+        1px solid rgba(255, 100, 100, 0.14);
 
-    color: #fca5a5;
+    border-radius: 10px;
 
-    font-size: 14px;
+    background:
+        rgba(100, 20, 25, 0.20);
+
+    color: #ff9d9d;
+
+    font-size: 13px;
 }
 
-/* ========================= */
-/* SCROLL TO BOTTOM          */
-/* ========================= */
+
+/* =========================================================
+   INPUT AREA
+   ========================================================= */
+
+.input-area {
+    position: relative;
+
+    flex-shrink: 0;
+
+    padding:
+        12px
+        clamp(20px, 5vw, 70px)
+        10px;
+}
+
+.input-box {
+    position: relative;
+
+    width: 100%;
+    min-height: 72px;
+
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 9px 10px;
+
+    border:
+        1px solid rgba(20, 165, 255, 0.65);
+
+    border-radius: 25px;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(5, 28, 52, 0.96),
+            rgba(2, 16, 31, 0.98)
+        );
+
+    box-shadow:
+        0 0 18px rgba(0, 130, 255, 0.13),
+        0 0 50px rgba(0, 100, 220, 0.06),
+        inset 0 1px rgba(255, 255, 255, 0.035);
+
+    transition:
+        border-color 0.25s ease,
+        box-shadow 0.25s ease;
+}
+
+.input-box:focus-within {
+    border-color:
+        rgba(40, 190, 255, 0.90);
+
+    box-shadow:
+        0 0 20px rgba(0, 150, 255, 0.22),
+        0 0 60px rgba(0, 110, 255, 0.10),
+        inset 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.input-box::before {
+    content: "";
+
+    position: absolute;
+
+    left: 18%;
+    right: 18%;
+    top: -2px;
+
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            rgba(60, 200, 255, 0.85),
+            transparent
+        );
+
+    filter: blur(2px);
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   INPUT ACTIONS
+   ========================================================= */
+
+.input-actions-left {
+    display: flex;
+    align-items: center;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+}
+
+.input-action {
+    width: 44px;
+    height: 44px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(60, 170, 240, 0.45);
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(20, 100, 170, 0.22),
+            rgba(5, 35, 65, 0.20)
+        );
+
+    color: #a9dfff;
+
+    font-size: 17px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.input-action:hover {
+    transform: translateY(-1px);
+
+    border-color:
+        rgba(70, 200, 255, 0.80);
+
+    background:
+        rgba(20, 120, 200, 0.25);
+
+    box-shadow:
+        0 0 16px rgba(0, 150, 255, 0.16);
+}
+
+
+/* =========================================================
+   LUCIDE INPUT ICONS
+   ========================================================= */
+
+.input-action svg {
+    width: 19px;
+    height: 19px;
+
+    stroke-width: 1.7;
+
+    color: currentColor;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.input-action:hover svg {
+    transform: scale(1.08);
+
+    filter:
+        drop-shadow(
+            0 0 5px rgba(60, 200, 255, 0.7)
+        );
+}
+
+
+/* =========================================================
+   FILE INPUT
+   ========================================================= */
+
+.hidden-file-input {
+    display: none;
+}
+
+.input-divider {
+    width: 1px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    background:
+        rgba(80, 170, 230, 0.18);
+}
+
+
+/* =========================================================
+   TEXT INPUT
+   ========================================================= */
+
+.input-message {
+    flex: 1;
+
+    min-width: 0;
+
+    height: 50px;
+
+    padding: 0 8px;
+
+    border: none;
+
+    outline: none;
+
+    background: transparent;
+
+    color: #edf9ff;
+
+    font-family: "Inter", sans-serif;
+
+    font-size: 15px;
+}
+
+.input-message::placeholder {
+    color:
+        rgba(160, 205, 230, 0.48);
+}
+
+.input-message:disabled {
+    opacity: 0.55;
+}
+
+
+/* =========================================================
+   SEND BUTTON
+   ========================================================= */
+
+.send-button {
+    width: 50px;
+    height: 50px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(80, 210, 255, 0.65);
+
+    border-radius: 50%;
+
+    background:
+        linear-gradient(
+            145deg,
+            #159ff5,
+            #0871d1
+        );
+
+    color: white;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 0 15px rgba(0, 150, 255, 0.25),
+        inset 0 1px rgba(255, 255, 255, 0.22);
+
+    transition:
+        transform 0.2s ease,
+        box-shadow 0.2s ease,
+        opacity 0.2s ease;
+}
+
+
+/* =========================================================
+   LUCIDE SEND ICON
+   ========================================================= */
+
+.send-icon {
+    width: 20px;
+    height: 20px;
+
+    stroke-width: 2;
+
+    transition:
+        transform 0.2s ease,
+        filter 0.2s ease;
+}
+
+.send-button:hover:not(:disabled) {
+    transform: scale(1.06);
+
+    box-shadow:
+        0 0 24px rgba(0, 170, 255, 0.45),
+        0 0 50px rgba(0, 130, 255, 0.12);
+}
+
+.send-button:hover:not(:disabled) .send-icon {
+    transform: translateX(1px);
+
+    filter:
+        drop-shadow(
+            0 0 6px rgba(180, 240, 255, 0.8)
+        );
+}
+
+.send-button:active:not(:disabled) {
+    transform: scale(0.96);
+}
+
+.send-button:disabled {
+    opacity: 0.35;
+
+    cursor: not-allowed;
+}
+
+
+/* =========================================================
+   SYSTEM STATUS
+   ========================================================= */
+
+.system-status {
+    flex-shrink: 0;
+
+    height: 38px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 10px;
+
+    color:
+        rgba(100, 190, 240, 0.65);
+
+    font-size: 9px;
+
+    letter-spacing: 0.08em;
+}
+
+.system-status strong {
+    color: #32c5ff;
+
+    font-weight: 600;
+}
+
+.status-divider {
+    color:
+        rgba(100, 180, 230, 0.20);
+
+    margin: 0 5px;
+}
+
+
+/* =========================================================
+   SCROLL TO BOTTOM
+   ========================================================= */
 
 .scroll-to-bottom {
     position: sticky;
+
     bottom: 15px;
 
     align-self: center;
 
-    margin-top: 10px;
+    margin-top: 8px;
+
     padding: 8px 14px;
 
-    border: 1px solid rgba(147, 197, 253, 0.25);
-    border-radius: 50px;
+    border:
+        1px solid rgba(60, 180, 255, 0.25);
 
-    background: #2f64a8;
-    color: white;
+    border-radius: 999px;
 
-    font-size: 13px;
+    background:
+        rgba(10, 55, 90, 0.94);
+
+    color: #d8efff;
+
+    font-size: 12px;
+
     font-weight: 600;
 
     cursor: pointer;
 
     box-shadow:
-        0 4px 14px rgba(0, 0, 0, 0.3);
+        0 8px 25px rgba(0, 0, 0, 0.35),
+        0 0 15px rgba(0, 120, 220, 0.08);
 
     z-index: 10;
 
-    animation: scrollButtonAppear 0.2s ease-out;
-
     transition:
-        background-color 0.2s ease,
         transform 0.2s ease,
-        box-shadow 0.2s ease;
+        background 0.2s ease;
 }
 
 .scroll-to-bottom:hover {
-    background: #3b76bd;
-
     transform: translateY(-2px);
 
-    box-shadow:
-        0 6px 18px rgba(0, 0, 0, 0.35);
+    background:
+        rgba(15, 80, 125, 0.96);
 }
 
-@keyframes scrollButtonAppear {
 
-    from {
-        opacity: 0;
-        transform: translateY(6px);
+/* =========================================================
+   RESPONSIVE — TABLET
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .sidebar {
+        width: 74px;
+
+        padding:
+            20px 10px;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .sidebar-brand-name,
+    .sidebar-brand-subtitle,
+    .nav-item > span:last-child {
+        display: none;
+    }
+
+    .sidebar-brand {
+        padding-bottom: 20px;
+    }
+
+    .nav-item {
+        justify-content: center;
+
+        padding: 8px;
+    }
+
+    .nav-icon {
+        width: 42px;
+        height: 42px;
+    }
+
+}
+
+
+/* =========================================================
+   RESPONSIVE — MOBILE
+   ========================================================= */
+
+@media (max-width: 650px) {
+
+    .sidebar {
+        display: none;
+    }
+
+    .main-area {
+        padding: 0;
+    }
+
+    .main-panel {
+        border-radius: 0;
+
+        border-left: none;
+        border-right: none;
+    }
+
+    .header {
+        height: 105px;
+    }
+
+    .title {
+        font-size: 23px;
+
+        letter-spacing: 0.22em;
+
+        padding-left: 0.22em;
+    }
+
+    .chat-window {
+        padding:
+            25px
+            14px
+            20px;
+    }
+
+    .message {
+        max-width: 88%;
+
+        font-size: 14px;
+    }
+
+    .input-area {
+        padding:
+            10px
+            12px
+            8px;
+    }
+
+    .input-box {
+        min-height: 62px;
+
+        border-radius: 21px;
+    }
+
+    .input-action {
+        width: 38px;
+        height: 38px;
+    }
+
+    .input-action svg {
+        width: 17px;
+        height: 17px;
+    }
+
+    .input-actions-left {
+        gap: 3px;
+    }
+
+    .input-divider {
+        display: none;
+    }
+
+    .input-message {
+        font-size: 14px;
+    }
+
+    .send-button {
+        width: 44px;
+        height: 44px;
+    }
+
+    .send-icon {
+        width: 18px;
+        height: 18px;
+    }
+
+    .system-status {
+        height: 32px;
+
+        font-size: 8px;
+
+        gap: 5px;
+    }
+
+    .status-divider {
+        margin: 0 2px;
     }
 
 }

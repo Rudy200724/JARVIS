@@ -1,130 +1,302 @@
 import { useState } from "react";
+import {
+    MessageSquare,
+    Brain,
+    Code2,
+    Activity,
+    Box,
+    Settings
+} from "lucide-react";
 
-import Header from "./components/Header"
-import ChatWindow from "./components/ChatWindow"
-import InputBox from "./components/InputBox"
+import Header from "./components/Header";
+import ChatWindow from "./components/ChatWindow";
+import InputBox from "./components/InputBox";
 
-function App(){
+function Sidebar() {
+    return (
+        <aside className="sidebar">
 
-  async function handleSend() {
+            <div className="sidebar-brand">
 
-  if (!message.trim()) {
-    return;
-  }
+                <div className="core-logo">
+                    <div className="core-logo-inner"></div>
+                </div>
 
-  setError("");
-  setIsLoading(true);
+                <div className="sidebar-brand-name">
+                    J.A.R.V.I.S
+                </div>
 
-  const newMessage = {
-    text: message,
-    sender: "user"
-  };
+                <div className="sidebar-brand-subtitle">
+                    COMMAND CENTER
+                </div>
 
-  setMessages((previousMessages) => [
-    ...previousMessages,
-    newMessage
-  ]);
+            </div>
 
-  setMessage("");
 
-  try {
+            <nav className="sidebar-nav">
 
-    const response = await fetch("http://localhost:8000/chat", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        message: message
-      })
-    });
+                <button className="nav-item active">
+                    <span className="nav-icon">
+                        <MessageSquare />
+                    </span>
+                    <span>CHAT</span>
+                </button>
 
-    if (!response.ok) {
-      throw new Error("Server error");
-    }
 
-    const reader = response.body.getReader();
-    const decoder = new TextDecoder();
+                <button className="nav-item">
+                    <span className="nav-icon">
+                        <Brain />
+                    </span>
+                    <span>MEMORY</span>
+                </button>
 
-    let fullResponse = "";
-    let jarvisMessageCreated = false;
 
-    while (true) {
+                <button className="nav-item">
+                    <span className="nav-icon">
+                        <Code2 />
+                    </span>
+                    <span>CODE</span>
+                </button>
 
-      const { value, done } = await reader.read();
 
-      if (done) {
-        break;
-      }
+                <button className="nav-item">
+                    <span className="nav-icon">
+                        <Activity />
+                    </span>
+                    <span>SYSTEM</span>
+                </button>
 
-      const chunk = decoder.decode(value, {
-        stream: true
-      });
 
-      fullResponse += chunk;
+                <button className="nav-item">
+                    <span className="nav-icon">
+                        <Box />
+                    </span>
+                    <span>TOOLS</span>
+                </button>
 
-      if (!jarvisMessageCreated) {
+            </nav>
+
+
+            <div className="sidebar-bottom">
+
+                <button className="nav-item">
+
+                    <span className="nav-icon">
+                        <Settings />
+                    </span>
+
+                    <span>SETTINGS</span>
+
+                </button>
+
+            </div>
+
+        </aside>
+    );
+}
+
+
+function App() {
+
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState("");
+
+
+    async function handleSend() {
+
+        if (!message.trim()) {
+            return;
+        }
+
+        setError("");
+        setIsLoading(true);
+
+        const newMessage = {
+            text: message,
+            sender: "user"
+        };
 
         setMessages((previousMessages) => [
-          ...previousMessages,
-          {
-            text: fullResponse,
-            sender: "jarvis"
-          }
+            ...previousMessages,
+            newMessage
         ]);
 
-        jarvisMessageCreated = true;
+        setMessage("");
 
-      } else {
-        setMessages((previousMessages) => {
+        try {
 
-          const updatedMessages = [...previousMessages];
+            const response = await fetch(
+                "http://localhost:8000/chat",
+                {
+                    method: "POST",
 
-          updatedMessages[updatedMessages.length - 1] = {
-            text: fullResponse,
-            sender: "jarvis"
-          };
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
 
-          return updatedMessages;
-        });
-      }
+                    body: JSON.stringify({
+                        message: message
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error("Server error");
+            }
+
+            const reader = response.body.getReader();
+            const decoder = new TextDecoder();
+
+            let fullResponse = "";
+            let jarvisMessageCreated = false;
+
+            while (true) {
+
+                const { value, done } =
+                    await reader.read();
+
+                if (done) {
+                    break;
+                }
+
+                const chunk = decoder.decode(
+                    value,
+                    {
+                        stream: true
+                    }
+                );
+
+                fullResponse += chunk;
+
+                if (!jarvisMessageCreated) {
+
+                    setMessages(
+                        (previousMessages) => [
+                            ...previousMessages,
+                            {
+                                text: fullResponse,
+                                sender: "jarvis"
+                            }
+                        ]
+                    );
+
+                    jarvisMessageCreated = true;
+
+                } else {
+
+                    setMessages(
+                        (previousMessages) => {
+
+                            const updatedMessages = [
+                                ...previousMessages
+                            ];
+
+                            updatedMessages[
+                                updatedMessages.length - 1
+                            ] = {
+                                text: fullResponse,
+                                sender: "jarvis"
+                            };
+
+                            return updatedMessages;
+                        }
+                    );
+                }
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Error connecting to JARVIS:",
+                error
+            );
+
+            setError(
+                "JARVIS is currently unavailable."
+            );
+
+        } finally {
+
+            setIsLoading(false);
+
+        }
     }
 
-  } catch (error) {
 
-    console.error("Error connecting to JARVIS:", error);
+    return (
 
-    setError("JARVIS is currently unavailable.");
+        <div className="app">
 
-  } finally {
+            <div className="ambient-glow"></div>
 
-    setIsLoading(false);
 
-  }
+            <Sidebar />
+
+
+            <main className="main-area">
+
+                <div className="main-panel">
+
+                    <Header />
+
+
+                    <section className="chat-container">
+
+                        <ChatWindow
+                            messages={messages}
+                            isLoading={isLoading}
+                            error={error}
+                        />
+
+                    </section>
+
+
+                    <InputBox
+                        message={message}
+                        setMessage={setMessage}
+                        handleSend={handleSend}
+                        isLoading={isLoading}
+                    />
+
+
+                    <div className="system-status">
+
+                        <span className="status-dot"></span>
+
+                        <span>
+                            SYSTEM STATUS:
+                            <strong> OPTIMAL</strong>
+                        </span>
+
+                        <span className="status-divider">
+                            |
+                        </span>
+
+                        <span>
+                            MEMORY:
+                            <strong> READY</strong>
+                        </span>
+
+                        <span className="status-divider">
+                            |
+                        </span>
+
+                        <span>
+                            CORE:
+                            <strong> ONLINE</strong>
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </div>
+    );
 }
 
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  return (
-    <div className="app">
-    <Header/>
-    <ChatWindow
-          messages={messages}
-          isLoading={isLoading}
-          error={error}
-
-    />
-    <InputBox
-          message={message}
-          setMessage={setMessage}
-          handleSend={handleSend}
-          isLoading={isLoading}
-    />
-    </div>
-  );
-}
 
 export default App;
