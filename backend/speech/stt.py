@@ -1,9 +1,8 @@
-from RealtimeSTT import AudioToTextRecorder
-
 class STT:
 
     def __init__(self):
         
+        from RealtimeSTT import AudioToTextRecorder
         self.recorder= AudioToTextRecorder(
             model="base.en",
             language="en",
