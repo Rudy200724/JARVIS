@@ -6,3 +6,4 @@ fastapi>=0.116,<1.0
 uvicorn>=0.35,<1.0
 passlib==1.7.4
 bcrypt==4.0.1
+python-jose==3.5.0
