@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
     MessageSquare,
     Brain,
@@ -6,13 +6,16 @@ import {
     Activity,
     Box,
     Settings
-} from "lucide-react";
-
+}
+from "lucide-react";
 import Header from "./components/Header";
 import ChatWindow from "./components/ChatWindow";
 import InputBox from "./components/InputBox";
+import Login from "./components/login";
 
-function Sidebar() {
+const API_URL = import.meta.env.VITE_API_URL;
+
+function Sidebar({onLogout}) {
     return (
         <aside className="sidebar">
 
@@ -89,14 +92,89 @@ function Sidebar() {
 
                 </button>
 
+                <button
+                  className="nav-item"
+                  onClick={onLogout}
+                >
+                  <span>LOGOUT</span>
+                </button>
+
             </div>
 
         </aside>
     );
 }
 
-
 function App() {
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [authChecking, setAuthChecking] = useState(true);
+
+    useEffect(() => {
+
+    async function checkAuthentication() {
+
+        try {
+
+            const response = await fetch(
+                `${API_URL}/auth/me`,
+                {
+                    credentials: "include"
+                }
+            );
+
+            if (response.ok) {
+
+                setIsAuthenticated(true);
+
+            } else {
+
+                setIsAuthenticated(false);
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Authentication check failed:",
+                error
+            );
+
+            setIsAuthenticated(false);
+
+        } finally {
+
+            setAuthChecking(false);
+
+        }
+    }
+
+    checkAuthentication();
+
+    }, []);
+
+    function handleLogin() {
+
+        setIsAuthenticated(true);
+    }
+
+    async function handleLogout() {
+
+    try {
+
+        await fetch(
+            `${API_URL}/auth/logout`,
+            {
+                method: "POST",
+                credentials: "include"
+            }
+        );
+
+    } finally {
+
+        setIsAuthenticated(false);
+
+    }
+}
 
     const [message, setMessage] = useState("");
     const [messages, setMessages] = useState([]);
@@ -128,12 +206,14 @@ function App() {
         try {
 
             const response = await fetch(
-                "http://localhost:8000/chat",
+                `${API_URL}/chat`,
                 {
                     method: "POST",
 
+                    credentials: "include",
+
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     },
 
                     body: JSON.stringify({
@@ -224,6 +304,13 @@ function App() {
         }
     }
 
+    if (authChecking){
+        return null;
+    }
+
+    if (!isAuthenticated) {
+    return <Login onLogin={handleLogin} />;
+    }
 
     return (
 
@@ -232,7 +319,7 @@ function App() {
             <div className="ambient-glow"></div>
 
 
-            <Sidebar />
+            <Sidebar onLogout={handleLogout} />
 
 
             <main className="main-area">
