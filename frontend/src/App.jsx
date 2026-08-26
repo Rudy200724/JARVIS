@@ -5,7 +5,9 @@ import {
     Code2,
     Activity,
     Box,
-    Settings
+    Settings,
+    Menu,
+    X
 }
 from "lucide-react";
 import Header from "./components/Header";
@@ -15,99 +17,131 @@ import Login from "./components/login";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
-function Sidebar({onLogout}) {
+function Sidebar({
+    onLogout,
+    collapsed,
+    mobileOpen,
+    onClose
+}) {
+
     return (
-        <aside className="sidebar">
+        <>
+            <div
+                className={`sidebar-overlay ${
+                    mobileOpen ? "visible" : ""
+                }`}
+                onClick={onClose}
+            />
 
-            <div className="sidebar-brand">
+            <aside
+                className={`sidebar
+                    ${collapsed ? "collapsed" : ""}
+                    ${mobileOpen ? "mobile-open" : ""}
+                `}
+            >
 
-                <div className="core-logo">
-                    <div className="core-logo-inner"></div>
+                <div className="sidebar-brand">
+
+                    <div className="core-logo">
+                        <div className="core-logo-inner"></div>
+                    </div>
+
+                    <div className="sidebar-brand-name">
+                        J.A.R.V.I.S
+                    </div>
+
+                    <div className="sidebar-brand-subtitle">
+                        COMMAND CENTER
+                    </div>
+
+                    <button
+                        className="sidebar-mobile-close"
+                        onClick={onClose}
+                        aria-label="Close navigation"
+                    >
+                        <X />
+                    </button>
+
                 </div>
 
-                <div className="sidebar-brand-name">
-                    J.A.R.V.I.S
+
+                <nav className="sidebar-nav">
+
+                    <button className="nav-item active">
+                        <span className="nav-icon">
+                            <MessageSquare />
+                        </span>
+                        <span>CHAT</span>
+                    </button>
+
+                    <button className="nav-item">
+                        <span className="nav-icon">
+                            <Brain />
+                        </span>
+                        <span>MEMORY</span>
+                    </button>
+
+                    <button className="nav-item">
+                        <span className="nav-icon">
+                            <Code2 />
+                        </span>
+                        <span>CODE</span>
+                    </button>
+
+                    <button className="nav-item">
+                        <span className="nav-icon">
+                            <Activity />
+                        </span>
+                        <span>SYSTEM</span>
+                    </button>
+
+                    <button className="nav-item">
+                        <span className="nav-icon">
+                            <Box />
+                        </span>
+                        <span>TOOLS</span>
+                    </button>
+
+                </nav>
+
+
+                <div className="sidebar-bottom">
+
+                    <button className="nav-item">
+
+                        <span className="nav-icon">
+                            <Settings />
+                        </span>
+
+                        <span>SETTINGS</span>
+
+                    </button>
+
+                    <button
+                        className="nav-item"
+                        onClick={onLogout}
+                    >
+                        <span className="nav-icon">
+                            <X />
+                        </span>
+
+                        <span>LOGOUT</span>
+                    </button>
+
                 </div>
 
-                <div className="sidebar-brand-subtitle">
-                    COMMAND CENTER
-                </div>
-
-            </div>
-
-
-            <nav className="sidebar-nav">
-
-                <button className="nav-item active">
-                    <span className="nav-icon">
-                        <MessageSquare />
-                    </span>
-                    <span>CHAT</span>
-                </button>
-
-
-                <button className="nav-item">
-                    <span className="nav-icon">
-                        <Brain />
-                    </span>
-                    <span>MEMORY</span>
-                </button>
-
-
-                <button className="nav-item">
-                    <span className="nav-icon">
-                        <Code2 />
-                    </span>
-                    <span>CODE</span>
-                </button>
-
-
-                <button className="nav-item">
-                    <span className="nav-icon">
-                        <Activity />
-                    </span>
-                    <span>SYSTEM</span>
-                </button>
-
-
-                <button className="nav-item">
-                    <span className="nav-icon">
-                        <Box />
-                    </span>
-                    <span>TOOLS</span>
-                </button>
-
-            </nav>
-
-
-            <div className="sidebar-bottom">
-
-                <button className="nav-item">
-
-                    <span className="nav-icon">
-                        <Settings />
-                    </span>
-
-                    <span>SETTINGS</span>
-
-                </button>
-
-                <button
-                  className="nav-item"
-                  onClick={onLogout}
-                >
-                  <span>LOGOUT</span>
-                </button>
-
-            </div>
-
-        </aside>
+            </aside>
+        </>
     );
 }
 
 function App() {
+
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [authChecking, setAuthChecking] = useState(true);
+
+    const [sidebarCollapsed, setSidebarCollapsed] =useState(false);
+    const [mobileSidebarOpen, setMobileSidebarOpen] =useState(false);
 
     useEffect(() => {
 
@@ -318,11 +352,35 @@ function App() {
 
             <div className="ambient-glow"></div>
 
+            <button
+                className="sidebar-toggle"
+                onClick={() => setSidebarCollapsed(previous => !previous)}
+                aria-label={
+                    sidebarCollapsed
+                        ? "Expand sidebar"
+                        : "Collapse sidebar"
+                }
+            >
+                <Menu />
+            </button>
 
-            <Sidebar onLogout={handleLogout} />
+            <Sidebar
+            onLogout={handleLogout}
+            collapsed={sidebarCollapsed}
+            mobileOpen={mobileSidebarOpen}
+            onClose={() => setMobileSidebarOpen(false)}
+            />
 
 
             <main className="main-area">
+
+                <button
+                    className="mobile-menu-button"
+                    onClick={() => setMobileSidebarOpen(true)}
+                    aria-label="Open navigation"
+                >
+                    <Menu />
+                </button>
 
                 <div className="main-panel">
 

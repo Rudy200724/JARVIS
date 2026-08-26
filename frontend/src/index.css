@@ -1577,9 +1577,174 @@ body {
         rgba(15, 80, 125, 0.96);
 }
 
+/* =========================================================
+   SIDEBAR COLLAPSE
+   ========================================================= */
+
+.sidebar {
+    transition:
+        width 0.25s ease,
+        transform 0.25s ease;
+}
+
+.sidebar.collapsed {
+    width: 74px;
+
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.sidebar.collapsed .sidebar-brand-name,
+.sidebar.collapsed .sidebar-brand-subtitle,
+.sidebar.collapsed .nav-item > span:last-child {
+    display: none;
+}
+
+.sidebar.collapsed .nav-item {
+    justify-content: center;
+}
+
+.sidebar.collapsed .sidebar-brand {
+    padding-bottom: 20px;
+}
+
 
 /* =========================================================
-   RESPONSIVE — TABLET
+   DESKTOP SIDEBAR TOGGLE
+   ========================================================= */
+
+.sidebar-toggle {
+    position: fixed;
+
+    left: 193px;
+    top: 18px;
+
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(60, 180, 255, 0.25);
+
+    border-radius: 50%;
+
+    background:
+        rgba(3, 15, 28, 0.92);
+
+    color: #62ccff;
+
+    cursor: pointer;
+
+    z-index: 30;
+
+    box-shadow:
+        0 0 15px rgba(0, 120, 220, 0.10);
+
+    transition:
+        left 0.25s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.sidebar-toggle:hover {
+    background:
+        rgba(10, 45, 75, 0.95);
+
+    box-shadow:
+        0 0 20px rgba(0, 150, 255, 0.20);
+}
+
+
+/*
+ * IMPORTANT:
+ *
+ * The toggle button comes BEFORE the Sidebar in App.jsx.
+ * Therefore the old:
+ *
+ * .sidebar.collapsed ~ .sidebar-toggle
+ *
+ * selector could never work.
+ *
+ * We now use the class placed on .app.
+ */
+
+.app.sidebar-collapsed .sidebar-toggle {
+    left: 62px;
+}
+
+.sidebar-toggle svg {
+    width: 15px;
+    height: 15px;
+}
+
+
+/* =========================================================
+   MOBILE MENU
+   ========================================================= */
+
+.mobile-menu-button {
+    display: none;
+
+    position: absolute;
+
+    top: 16px;
+    left: 16px;
+
+    width: 42px;
+    height: 42px;
+
+    align-items: center;
+    justify-content: center;
+
+    border:
+        1px solid rgba(60, 180, 255, 0.25);
+
+    border-radius: 12px;
+
+    background:
+        rgba(3, 15, 28, 0.90);
+
+    color: #62ccff;
+
+    cursor: pointer;
+
+    z-index: 20;
+}
+
+.mobile-menu-button svg {
+    width: 20px;
+    height: 20px;
+}
+
+
+/* =========================================================
+   SIDEBAR MOBILE OVERLAY
+   ========================================================= */
+
+.sidebar-overlay {
+    display: none;
+
+    position: fixed;
+    inset: 0;
+
+    background:
+        rgba(0, 5, 12, 0.65);
+
+    backdrop-filter: blur(3px);
+
+    z-index: 40;
+}
+
+.sidebar-mobile-close {
+    display: none;
+}
+
+
+/* =========================================================
+   TABLET
    ========================================================= */
 
 @media (max-width: 1000px) {
@@ -1603,7 +1768,6 @@ body {
 
     .nav-item {
         justify-content: center;
-
         padding: 8px;
     }
 
@@ -1612,48 +1776,214 @@ body {
         height: 42px;
     }
 
+    /*
+     * Desktop collapse toggle isn't needed in tablet mode.
+     */
+
+    .sidebar-toggle {
+        display: none;
+    }
+
 }
 
 
 /* =========================================================
-   RESPONSIVE — MOBILE
+   MOBILE
    ========================================================= */
 
 @media (max-width: 650px) {
 
-    .sidebar {
-        display: none;
+    html,
+    body,
+    #root {
+        height: 100%;
+        min-height: 100%;
     }
 
+
+    body {
+        overflow: hidden;
+
+        overscroll-behavior-y: auto;
+    }
+
+
+    .app {
+        height: 100dvh;
+        min-height: 100dvh;
+    }
+
+
     .main-area {
+        height: 100dvh;
+
         padding: 0;
     }
 
+
     .main-panel {
+        height: 100dvh;
+
         border-radius: 0;
 
         border-left: none;
         border-right: none;
     }
 
-    .header {
-        height: 105px;
+
+    /* ---------------------------------------------------------
+       Mobile hamburger
+       --------------------------------------------------------- */
+
+    .mobile-menu-button {
+        display: flex;
     }
+
+
+    /* ---------------------------------------------------------
+       Mobile sidebar drawer
+       --------------------------------------------------------- */
+
+    .sidebar {
+        position: fixed;
+
+        top: 0;
+        left: 0;
+
+        width: min(290px, 82vw);
+        height: 100dvh;
+
+        padding:
+            24px 18px;
+
+        transform:
+            translateX(-105%);
+
+        transition:
+            transform 0.28s ease;
+
+        z-index: 50;
+
+        box-shadow:
+            15px 0 50px rgba(0, 70, 140, 0.18);
+    }
+
+
+    .sidebar.mobile-open {
+        transform: translateX(0);
+    }
+
+
+    /*
+     * On mobile, the desktop collapsed state should not
+     * turn the drawer into the 74px icon-only sidebar.
+     */
+
+    .sidebar.collapsed {
+        width: min(290px, 82vw);
+
+        padding:
+            24px 18px;
+    }
+
+
+    .sidebar.collapsed .sidebar-brand-name,
+    .sidebar.collapsed .sidebar-brand-subtitle,
+    .sidebar.collapsed .nav-item > span:last-child {
+        display: inline;
+    }
+
+
+    .sidebar.collapsed .nav-item {
+        justify-content: flex-start;
+    }
+
+
+    /* ---------------------------------------------------------
+       Mobile overlay
+       --------------------------------------------------------- */
+
+    .sidebar-overlay.visible {
+        display: block;
+    }
+
+
+    /* ---------------------------------------------------------
+       Mobile close button
+       --------------------------------------------------------- */
+
+    .sidebar-mobile-close {
+        display: flex;
+
+        position: absolute;
+
+        top: 4px;
+        right: 4px;
+
+        width: 34px;
+        height: 34px;
+
+        align-items: center;
+        justify-content: center;
+
+        border:
+            1px solid rgba(60, 180, 255, 0.20);
+
+        border-radius: 50%;
+
+        background:
+            rgba(5, 20, 35, 0.8);
+
+        color: #63ccff;
+
+        cursor: pointer;
+    }
+
+
+    .sidebar-mobile-close svg {
+        width: 17px;
+        height: 17px;
+    }
+
+
+    /* ---------------------------------------------------------
+       Header
+       --------------------------------------------------------- */
+
+    .header {
+        height: 92px;
+
+        padding-top: 8px;
+    }
+
+
+    .system-label {
+        font-size: 7px;
+
+        margin-bottom: 5px;
+    }
+
 
     .title {
-        font-size: 23px;
+        font-size: 21px;
 
-        letter-spacing: 0.22em;
+        letter-spacing: 0.20em;
 
-        padding-left: 0.22em;
+        padding-left: 0.20em;
     }
+
+
+    /* ---------------------------------------------------------
+       Chat
+       --------------------------------------------------------- */
 
     .chat-window {
         padding:
-            25px
-            14px
-            20px;
+            20px
+            12px
+            18px;
     }
+
 
     .message {
         max-width: 88%;
@@ -1661,64 +1991,59 @@ body {
         font-size: 14px;
     }
 
+
+    /* ---------------------------------------------------------
+       Input
+       --------------------------------------------------------- */
+
     .input-area {
         padding:
+            8px
             10px
-            12px
-            8px;
+            max(
+                8px,
+                env(safe-area-inset-bottom)
+            );
     }
+
 
     .input-box {
-        min-height: 62px;
+        min-height: 60px;
 
-        border-radius: 21px;
+        border-radius: 20px;
     }
 
-    .input-action {
-        width: 38px;
-        height: 38px;
-    }
 
-    .input-action svg {
-        width: 17px;
-        height: 17px;
-    }
-
-    .input-actions-left {
-        gap: 3px;
-    }
-
-    .input-divider {
-        display: none;
-    }
-
-    .input-message {
-        font-size: 14px;
-    }
-
-    .send-button {
-        width: 44px;
-        height: 44px;
-    }
-
-    .send-icon {
-        width: 18px;
-        height: 18px;
-    }
+    /* ---------------------------------------------------------
+       System status
+       --------------------------------------------------------- */
 
     .system-status {
-        height: 32px;
+        min-height: 30px;
+        height: auto;
 
-        font-size: 8px;
+        padding:
+            3px
+            6px
+            max(
+                3px,
+                env(safe-area-inset-bottom)
+            );
 
-        gap: 5px;
+        font-size: 7px;
+
+        gap: 4px;
+
+        white-space: nowrap;
     }
+
 
     .status-divider {
         margin: 0 2px;
     }
 
 }
+
 /* =========================================================
    JARVIS LOGIN PAGE
    ========================================================= */
