@@ -3,9 +3,9 @@ import os
 from api.routes import router
 from api.auth import router as auth_router
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware      
+from fastapi.middleware.cors import CORSMiddleware
 
-app=FastAPI(
+app = FastAPI(
     title="JARVIS API",
     description="Backend API for the JARVIS AI Assistant",
     version="0.1.0",
@@ -18,7 +18,7 @@ FRONTEND_URL = os.getenv(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[FRONTEND_URL],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

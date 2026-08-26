@@ -185,8 +185,9 @@ def login(
         value=token,
         httponly=True,
         secure=os.getenv("COOKIE_SECURE", "false").lower() == "true",
-        samesite="lax",
+        samesite="none",
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
+        path="/"
     )
 
 
@@ -202,8 +203,14 @@ def login(
 @router.post("/logout")
 def logout(response: Response):
 
+    secure = os.getenv("COOKIE_SECURE","false").lower() == "true"
+
     response.delete_cookie(
-        key="jarvis_token"
+        key="jarvis_token",
+        path="/",
+        secure=secure,
+        httponly=True,
+        samesite="none",
     )
 
     return {
