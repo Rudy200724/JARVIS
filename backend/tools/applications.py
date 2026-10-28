@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from devices.base import Application
 from devices.manager import DeviceManager
 
 
@@ -18,10 +19,6 @@ def _get_device_manager() -> DeviceManager:
 def open_application(name: str) -> str:
     """
     Open an installed application on the device running the local JARVIS agent.
-
-    Important:
-    If this code runs on Render, it controls Render — not the user's laptop.
-    Remote device control will be added through a companion/device-agent channel.
     """
     try:
         return _get_device_manager().open_application(name)
@@ -35,3 +32,10 @@ def refresh_applications() -> str:
         return f"Application catalogue refreshed. I found {count} launchable entries, Sir."
     except RuntimeError as exc:
         return str(exc)
+
+
+def list_applications() -> list[Application]:
+    try:
+        return _get_device_manager().get_applications()
+    except Exception:
+        return []

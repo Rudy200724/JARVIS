@@ -26,3 +26,6 @@ class Device(ABC):
     @abstractmethod
     def refresh_applications(self) -> int:
         raise NotImplementedError
+
+    def get_applications(self) -> list[Application]:
+        return []

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import platform
 
-from devices.base import Device
+from devices.base import Application, Device
 from devices.windows import WindowsDevice
 
 
@@ -33,5 +33,11 @@ class DeviceManager:
     def open_application(self, app_name: str) -> str:
         return self.local_device.open_application(app_name)
 
+    def find_application(self, query: str) -> Application | None:
+        return self.local_device.find_application(query)
+
     def refresh_applications(self) -> int:
         return self.local_device.refresh_applications()
+
+    def get_applications(self) -> list[Application]:
+        return self.local_device.get_applications()
