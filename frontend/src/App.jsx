@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import {
     MessageSquare,
     Brain,
@@ -7,15 +8,22 @@ import {
     Box,
     Settings,
     Menu,
-    X
-}
-from "lucide-react";
+    X,
+    LogOut
+} from "lucide-react";
+
 import Header from "./components/Header";
 import ChatWindow from "./components/ChatWindow";
 import InputBox from "./components/InputBox";
 import Login from "./components/login";
 
+
 const API_URL = import.meta.env.VITE_API_URL;
+
+
+/* =========================================================
+   SIDEBAR
+   ========================================================= */
 
 function Sidebar({
     onLogout,
@@ -26,6 +34,8 @@ function Sidebar({
 
     return (
         <>
+            {/* Mobile overlay */}
+
             <div
                 className={`sidebar-overlay ${
                     mobileOpen ? "visible" : ""
@@ -33,12 +43,19 @@ function Sidebar({
                 onClick={onClose}
             />
 
+
+            {/* Sidebar */}
+
             <aside
                 className={`sidebar
                     ${collapsed ? "collapsed" : ""}
                     ${mobileOpen ? "mobile-open" : ""}
                 `}
             >
+
+                {/* -------------------------------------------------
+                   BRAND
+                   ------------------------------------------------- */}
 
                 <div className="sidebar-brand">
 
@@ -54,6 +71,9 @@ function Sidebar({
                         COMMAND CENTER
                     </div>
 
+
+                    {/* Mobile close button */}
+
                     <button
                         className="sidebar-mobile-close"
                         onClick={onClose}
@@ -65,45 +85,82 @@ function Sidebar({
                 </div>
 
 
+                {/* -------------------------------------------------
+                   NAVIGATION
+                   ------------------------------------------------- */}
+
                 <nav className="sidebar-nav">
 
                     <button className="nav-item active">
+
                         <span className="nav-icon">
                             <MessageSquare />
                         </span>
-                        <span>CHAT</span>
+
+                        <span>
+                            CHAT
+                        </span>
+
                     </button>
 
+
                     <button className="nav-item">
+
                         <span className="nav-icon">
                             <Brain />
                         </span>
-                        <span>MEMORY</span>
+
+                        <span>
+                            MEMORY
+                        </span>
+
                     </button>
 
+
                     <button className="nav-item">
+
                         <span className="nav-icon">
                             <Code2 />
                         </span>
-                        <span>CODE</span>
+
+                        <span>
+                            CODE
+                        </span>
+
                     </button>
 
+
                     <button className="nav-item">
+
                         <span className="nav-icon">
                             <Activity />
                         </span>
-                        <span>SYSTEM</span>
+
+                        <span>
+                            SYSTEM
+                        </span>
+
                     </button>
 
+
                     <button className="nav-item">
+
                         <span className="nav-icon">
                             <Box />
                         </span>
-                        <span>TOOLS</span>
+
+                        <span>
+                            TOOLS
+                        </span>
+
                     </button>
 
                 </nav>
 
+
+                {/* -------------------------------------------------
+                   SIDEBAR BOTTOM
+                   ------------------------------------------------- */}
 
                 <div className="sidebar-bottom">
 
@@ -113,19 +170,26 @@ function Sidebar({
                             <Settings />
                         </span>
 
-                        <span>SETTINGS</span>
+                        <span>
+                            SETTINGS
+                        </span>
 
                     </button>
+
 
                     <button
                         className="nav-item"
                         onClick={onLogout}
                     >
+
                         <span className="nav-icon">
-                            <X />
+                            <LogOut />
                         </span>
 
-                        <span>LOGOUT</span>
+                        <span>
+                            LOGOUT
+                        </span>
+
                     </button>
 
                 </div>
@@ -135,107 +199,199 @@ function Sidebar({
     );
 }
 
+
+/* =========================================================
+   APP
+   ========================================================= */
+
 function App() {
 
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [authChecking, setAuthChecking] = useState(true);
+    /* ---------------------------------------------------------
+       AUTHENTICATION
+       --------------------------------------------------------- */
 
-    const [sidebarCollapsed, setSidebarCollapsed] =useState(false);
-    const [mobileSidebarOpen, setMobileSidebarOpen] =useState(false);
+    const [isAuthenticated, setIsAuthenticated] =
+        useState(false);
+
+    const [authChecking, setAuthChecking] =
+        useState(true);
+
+
+    /* ---------------------------------------------------------
+       SIDEBAR STATE
+       --------------------------------------------------------- */
+
+    const [sidebarCollapsed, setSidebarCollapsed] =
+        useState(
+            () =>
+                localStorage.getItem(
+                    "jarvis_sidebar_collapsed"
+                ) === "true"
+        );
+
+
+    const [mobileSidebarOpen, setMobileSidebarOpen] =
+        useState(false);
+
+
+    /* ---------------------------------------------------------
+       CHECK AUTHENTICATION
+       --------------------------------------------------------- */
 
     useEffect(() => {
 
-    async function checkAuthentication() {
+        async function checkAuthentication() {
 
-        try {
+            try {
 
-            const response = await fetch(
-                `${API_URL}/auth/me`,
-                {
-                    credentials: "include"
+                const response = await fetch(
+                    `${API_URL}/auth/me`,
+                    {
+                        credentials: "include"
+                    }
+                );
+
+
+                if (response.ok) {
+
+                    setIsAuthenticated(true);
+
+                } else {
+
+                    setIsAuthenticated(false);
+
                 }
-            );
 
-            if (response.ok) {
+            } catch (error) {
 
-                setIsAuthenticated(true);
-
-            } else {
+                console.error(
+                    "Authentication check failed:",
+                    error
+                );
 
                 setIsAuthenticated(false);
 
+            } finally {
+
+                setAuthChecking(false);
+
             }
-
-        } catch (error) {
-
-            console.error(
-                "Authentication check failed:",
-                error
-            );
-
-            setIsAuthenticated(false);
-
-        } finally {
-
-            setAuthChecking(false);
-
         }
-    }
 
-    checkAuthentication();
+
+        checkAuthentication();
 
     }, []);
+
+
+    /* ---------------------------------------------------------
+       LOGIN
+       --------------------------------------------------------- */
 
     function handleLogin() {
 
         setIsAuthenticated(true);
+
     }
+
+
+    /* ---------------------------------------------------------
+       LOGOUT
+       --------------------------------------------------------- */
 
     async function handleLogout() {
 
-    try {
+        try {
 
-        await fetch(
-            `${API_URL}/auth/logout`,
-            {
-                method: "POST",
-                credentials: "include"
-            }
-        );
+            await fetch(
+                `${API_URL}/auth/logout`,
+                {
+                    method: "POST",
+                    credentials: "include"
+                }
+            );
 
-    } finally {
+        } finally {
 
-        setIsAuthenticated(false);
+            setIsAuthenticated(false);
+
+        }
+    }
+
+
+    /* ---------------------------------------------------------
+       SIDEBAR TOGGLE
+       --------------------------------------------------------- */
+
+    function toggleSidebar() {
+
+        setSidebarCollapsed(previous => {
+
+            const next = !previous;
+
+            localStorage.setItem(
+                "jarvis_sidebar_collapsed",
+                String(next)
+            );
+
+            return next;
+
+        });
 
     }
-}
 
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
 
+    /* ---------------------------------------------------------
+       CHAT STATE
+       --------------------------------------------------------- */
+
+    const [message, setMessage] =
+        useState("");
+
+    const [messages, setMessages] =
+        useState([]);
+
+    const [isLoading, setIsLoading] =
+        useState(false);
+
+    const [error, setError] =
+        useState("");
+
+
+    /* ---------------------------------------------------------
+       SEND MESSAGE
+       --------------------------------------------------------- */
 
     async function handleSend() {
 
         if (!message.trim()) {
+
             return;
+
         }
 
+
         setError("");
+
         setIsLoading(true);
+
 
         const newMessage = {
             text: message,
             sender: "user"
         };
 
-        setMessages((previousMessages) => [
-            ...previousMessages,
-            newMessage
-        ]);
+
+        setMessages(
+            previousMessages => [
+                ...previousMessages,
+                newMessage
+            ]
+        );
+
 
         setMessage("");
+
 
         try {
 
@@ -247,7 +403,7 @@ function App() {
                     credentials: "include",
 
                     headers: {
-                        "Content-Type": "application/json",
+                        "Content-Type": "application/json"
                     },
 
                     body: JSON.stringify({
@@ -256,38 +412,60 @@ function App() {
                 }
             );
 
+
             if (!response.ok) {
-                throw new Error("Server error");
+
+                throw new Error(
+                    "Server error"
+                );
+
             }
 
-            const reader = response.body.getReader();
-            const decoder = new TextDecoder();
+
+            const reader =
+                response.body.getReader();
+
+            const decoder =
+                new TextDecoder();
+
 
             let fullResponse = "";
-            let jarvisMessageCreated = false;
+
+            let jarvisMessageCreated =
+                false;
+
 
             while (true) {
 
-                const { value, done } =
-                    await reader.read();
+                const {
+                    value,
+                    done
+                } = await reader.read();
+
 
                 if (done) {
+
                     break;
+
                 }
 
-                const chunk = decoder.decode(
-                    value,
-                    {
-                        stream: true
-                    }
-                );
+
+                const chunk =
+                    decoder.decode(
+                        value,
+                        {
+                            stream: true
+                        }
+                    );
+
 
                 fullResponse += chunk;
+
 
                 if (!jarvisMessageCreated) {
 
                     setMessages(
-                        (previousMessages) => [
+                        previousMessages => [
                             ...previousMessages,
                             {
                                 text: fullResponse,
@@ -296,16 +474,18 @@ function App() {
                         ]
                     );
 
+
                     jarvisMessageCreated = true;
 
                 } else {
 
                     setMessages(
-                        (previousMessages) => {
+                        previousMessages => {
 
                             const updatedMessages = [
                                 ...previousMessages
                             ];
+
 
                             updatedMessages[
                                 updatedMessages.length - 1
@@ -314,10 +494,14 @@ function App() {
                                 sender: "jarvis"
                             };
 
+
                             return updatedMessages;
+
                         }
                     );
+
                 }
+
             }
 
         } catch (error) {
@@ -326,6 +510,7 @@ function App() {
                 "Error connecting to JARVIS:",
                 error
             );
+
 
             setError(
                 "JARVIS is currently unavailable."
@@ -336,56 +521,115 @@ function App() {
             setIsLoading(false);
 
         }
+
     }
 
-    if (authChecking){
+
+    /* ---------------------------------------------------------
+       AUTH CHECK LOADING
+       --------------------------------------------------------- */
+
+    if (authChecking) {
+
         return null;
+
     }
+
+
+    /* ---------------------------------------------------------
+       LOGIN PAGE
+       --------------------------------------------------------- */
 
     if (!isAuthenticated) {
-    return <Login onLogin={handleLogin} />;
+
+        return (
+            <Login
+                onLogin={handleLogin}
+            />
+        );
+
     }
+
+
+    /* ---------------------------------------------------------
+       MAIN APPLICATION
+       --------------------------------------------------------- */
 
     return (
 
-        <div className="app">
+        <div
+            className={`app ${
+                sidebarCollapsed
+                    ? "sidebar-collapsed"
+                    : ""
+            }`}
+        >
 
             <div className="ambient-glow"></div>
 
+
+            {/* -------------------------------------------------
+               DESKTOP SIDEBAR TOGGLE
+               ------------------------------------------------- */}
+
             <button
                 className="sidebar-toggle"
-                onClick={() => setSidebarCollapsed(previous => !previous)}
+                onClick={toggleSidebar}
                 aria-label={
                     sidebarCollapsed
                         ? "Expand sidebar"
                         : "Collapse sidebar"
                 }
             >
+
                 <Menu />
+
             </button>
 
+
+            {/* -------------------------------------------------
+               SIDEBAR
+               ------------------------------------------------- */}
+
             <Sidebar
-            onLogout={handleLogout}
-            collapsed={sidebarCollapsed}
-            mobileOpen={mobileSidebarOpen}
-            onClose={() => setMobileSidebarOpen(false)}
+                onLogout={handleLogout}
+                collapsed={sidebarCollapsed}
+                mobileOpen={mobileSidebarOpen}
+                onClose={() =>
+                    setMobileSidebarOpen(false)
+                }
             />
 
 
+            {/* -------------------------------------------------
+               MAIN AREA
+               ------------------------------------------------- */}
+
             <main className="main-area">
+
+                {/* Mobile hamburger */}
 
                 <button
                     className="mobile-menu-button"
-                    onClick={() => setMobileSidebarOpen(true)}
+                    onClick={() =>
+                        setMobileSidebarOpen(true)
+                    }
                     aria-label="Open navigation"
                 >
+
                     <Menu />
+
                 </button>
+
 
                 <div className="main-panel">
 
                     <Header />
 
+
+                    {/* -------------------------------------------------
+                       CHAT
+                       ------------------------------------------------- */}
 
                     <section className="chat-container">
 
@@ -398,6 +642,10 @@ function App() {
                     </section>
 
 
+                    {/* -------------------------------------------------
+                       INPUT
+                       ------------------------------------------------- */}
+
                     <InputBox
                         message={message}
                         setMessage={setMessage}
@@ -406,31 +654,46 @@ function App() {
                     />
 
 
+                    {/* -------------------------------------------------
+                       SYSTEM STATUS
+                       ------------------------------------------------- */}
+
                     <div className="system-status">
 
                         <span className="status-dot"></span>
 
+
                         <span>
                             SYSTEM STATUS:
-                            <strong> OPTIMAL</strong>
+                            <strong>
+                                {" "}OPTIMAL
+                            </strong>
                         </span>
+
 
                         <span className="status-divider">
                             |
                         </span>
+
 
                         <span>
                             MEMORY:
-                            <strong> READY</strong>
+                            <strong>
+                                {" "}READY
+                            </strong>
                         </span>
+
 
                         <span className="status-divider">
                             |
                         </span>
 
+
                         <span>
                             CORE:
-                            <strong> ONLINE</strong>
+                            <strong>
+                                {" "}ONLINE
+                            </strong>
                         </span>
 
                     </div>
@@ -440,7 +703,9 @@ function App() {
             </main>
 
         </div>
+
     );
+
 }
 
 
